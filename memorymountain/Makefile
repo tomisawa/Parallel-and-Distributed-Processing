@@ -1,10 +1,8 @@
-CC = gcc
-CFLAGS = -Wall 
+CC = cc
+CFLAGS = -Wall
 
-mountain: mountain.c fcyc2.c clock.c
-	$(CC) $(CFLAGS) -o mountain mountain.c fcyc2.c clock.c 
+mountain: mountain.c fcyc.c clock.c
+	$(CC) $(CFLAGS) -o mountain mountain.c fcyc.c clock.c 
 
 clean:
 	rm -f mountain *.o *~
-
-

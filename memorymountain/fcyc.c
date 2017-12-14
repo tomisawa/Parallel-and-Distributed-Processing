@@ -13,49 +13,49 @@ static int samplecount = 0;
 
 static void init_sampler()
 {
-    if (values) free(values);
-    values = calloc(KBEST, sizeof(double));
-    samplecount = 0;
+	if (values) free(values);
+	values = calloc(KBEST, sizeof(double));
+	samplecount = 0;
 }
 
 static void add_sample(double val)
 {
-    int pos = 0;
-    if (samplecount < KBEST) {
-        pos = samplecount;
-        values[pos] = val;
-    } else if (val < values[KBEST-1]) {
-        pos = KBEST-1;
-        values[pos] = val;
-    }
+	int pos = 0;
+	if (samplecount < KBEST) {
+		pos = samplecount;
+		values[pos] = val;
+	} else if (val < values[KBEST-1]) {
+		pos = KBEST-1;
+		values[pos] = val;
+	}
 
-    samplecount++;
-    while (pos > 0 && values[pos-1] > values[pos]) {
-        double temp = values[pos-1];
-        values[pos-1] = values[pos];
-        values[pos] = temp;
-        pos--;
-    }
+	samplecount++;
+	while (pos > 0 && values[pos-1] > values[pos]) {
+		double temp = values[pos-1];
+		values[pos-1] = values[pos];
+		values[pos] = temp;
+		pos--;
+	}
 }
 
 static int has_converged()
 {
-    return
-        (samplecount >= KBEST) &&
-        ((1 + EPSILON)*values[0] >= values[KBEST-1]);
+	return
+		(samplecount >= KBEST) &&
+		((1 + EPSILON)*values[0] >= values[KBEST-1]);
 }
 
 double fcyc(test_funct f, int arg1, int arg2 )
 {
-    init_sampler();
+	init_sampler();
 
-    do {
-        double cyc;
-        start_counter();
-        f(arg1, arg2);
-        cyc = get_counter();
-        add_sample(cyc);
-    } while (!has_converged() && samplecount < MAXSAMPLES);
+	do {
+		double cyc;
+		start_counter();
+		f(arg1, arg2);
+		cyc = get_counter();
+		add_sample(cyc);
+	} while (!has_converged() && samplecount < MAXSAMPLES);
 
-    return values[0];
+		return values[0];
 }
